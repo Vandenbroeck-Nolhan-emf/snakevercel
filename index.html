@@ -1,14 +1,114 @@
-<!DOCTYPE html> 
-<html lang="en"> 
-    <head> 
-        <meta charset="utf-8" /> 
-        <title>Snake</title>  
-        <link rel="stylesheet" href="css/main.css" type="text/css" />  
-        <script src="js/snake.js"></script>
-    </head>
-    <body id="body">
-        <script type="text/javascript">
-            var snake = new SnakeGame('body');
-        </script>
-    </body> 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SNAKE</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="snake.css" />
+</head>
+<body>
+
+<div class="wrapper">
+  <!-- Left Panel -->
+  <div class="side-panel">
+    <div class="logo">SNK</div>
+
+    <div class="stat-box">
+      <div class="stat-label">Score</div>
+      <div class="stat-value" id="score">0</div>
+    </div>
+
+    <div class="stat-box hi-score">
+      <div class="stat-label">Meilleur</div>
+      <div class="stat-value" id="hi-score">0</div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-label">Niveau</div>
+      <div class="stat-value" id="level">1</div>
+      <div class="level-bar"><div class="level-bar-fill" id="level-bar" style="width:0%"></div></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="controls">
+      <button class="btn btn-start" id="btn-start">▶ JOUER</button>
+      <button class="btn" id="btn-pause" disabled>⏸ PAUSE</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div>
+      <div class="stat-label" style="margin-bottom:6px">VITESSE</div>
+      <div class="speed-select">
+        <button class="speed-btn active" data-speed="slow">LENT</button>
+        <button class="speed-btn" data-speed="normal">NOR</button>
+        <button class="speed-btn" data-speed="fast">VITE</button>
+      </div>
+    </div>
+
+    <div class="help-text kb">
+      ↑ ↓ ← → déplacer<br>
+      P pause<br>
+      R redémarrer
+    </div>
+  </div>
+
+  <!-- Canvas -->
+  <div class="game-container">
+    <div class="canvas-wrap">
+      <div class="corner c-tr"></div>
+      <div class="corner c-bl"></div>
+      <canvas id="gameboard" width="400" height="400"></canvas>
+      <div class="scanlines"></div>
+      <div id="particles"></div>
+
+      <!-- Overlay -->
+      <div class="overlay" id="overlay">
+        <div class="overlay-title" id="overlay-title">SNAKE</div>
+        <div class="overlay-sub" id="overlay-sub">Prêt à jouer ?</div>
+        <div id="overlay-extra"></div>
+      </div>
+    </div>
+
+    <!-- Touch D-pad -->
+    <div class="touch-controls">
+      <div class="touch-row">
+        <div class="dpad-btn" id="d-up">▲</div>
+      </div>
+      <div class="touch-row">
+        <div class="dpad-btn" id="d-left">◄</div>
+        <div class="dpad-btn" id="d-down">▼</div>
+        <div class="dpad-btn" id="d-right">►</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="right-panel">
+    <div class="streak-display">
+      <div class="streak-number" id="streak">0</div>
+      <div class="streak-label">SÉRIE</div>
+    </div>
+
+    <div class="food-progress stat-box">
+      <div class="stat-label">Progrès</div>
+      <div class="food-dots" id="food-dots"></div>
+    </div>
+
+    <div class="current-speed stat-box">
+      <div class="stat-label">Taille</div>
+      <div class="speed-val" id="snake-length">3</div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-label">Temps</div>
+      <div class="stat-value" id="timer" style="font-size:1.2rem">00:00</div>
+    </div>
+  </div>
+</div>
+
+  <script src="snake.js"></script>
+</body>
 </html>
