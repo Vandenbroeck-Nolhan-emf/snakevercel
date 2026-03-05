@@ -3,112 +3,150 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SNAKE</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/main.css" />
+<title>SNAKE NEXUS — Multijoueur</title>
+<link rel="stylesheet" href="css/main.css"/>
 </head>
 <body>
+<div id="bg-stars"></div>
 
-<div class="wrapper">
-  <!-- Left Panel -->
-  <div class="side-panel">
-    <div class="logo">SNK</div>
-
-    <div class="stat-box">
-      <div class="stat-label">Score</div>
-      <div class="stat-value" id="score">0</div>
+<!-- ══ LOBBY ══════════════════════════════════════════════ -->
+<div id="screen-lobby" class="screen">
+  <div class="lobby-box">
+    <div class="lobby-header">
+      <div class="lobby-logo">NEXUS</div>
+      <div class="lobby-sub">MULTIJOUEUR · JUSQU'À 6 JOUEURS · MULTI-ONGLETS</div>
     </div>
+    <div class="lobby-body">
 
-    <div class="stat-box hi-score">
-      <div class="stat-label">Meilleur</div>
-      <div class="stat-value" id="hi-score">0</div>
-    </div>
-
-    <div class="stat-box">
-      <div class="stat-label">Niveau</div>
-      <div class="stat-value" id="level">1</div>
-      <div class="level-bar"><div class="level-bar-fill" id="level-bar" style="width:0%"></div></div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="controls">
-      <button class="btn btn-start" id="btn-start">▶ JOUER</button>
-      <button class="btn" id="btn-pause" disabled>⏸ PAUSE</button>
-    </div>
-
-    <div class="divider"></div>
-
-    <div>
-      <div class="stat-label" style="margin-bottom:6px">VITESSE</div>
-      <div class="speed-select">
-        <button class="speed-btn active" data-speed="slow">LENT</button>
-        <button class="speed-btn" data-speed="normal">NOR</button>
-        <button class="speed-btn" data-speed="fast">VITE</button>
+      <div class="field-group">
+        <div class="field-label">👤 Ton pseudo</div>
+        <input class="field-input" id="name-input" maxlength="16" placeholder="Entrez votre pseudo..." autocomplete="off"/>
       </div>
-    </div>
 
-    <div class="help-text kb">
-      ↑ ↓ ← → déplacer<br>
-      P pause<br>
-      R redémarrer
-    </div>
-  </div>
-
-  <!-- Canvas -->
-  <div class="game-container">
-    <div class="canvas-wrap">
-      <div class="corner c-tr"></div>
-      <div class="corner c-bl"></div>
-      <canvas id="gameboard" width="400" height="400"></canvas>
-      <div class="scanlines"></div>
-      <div id="particles"></div>
-
-      <!-- Overlay -->
-      <div class="overlay" id="overlay">
-        <div class="overlay-title" id="overlay-title">SNAKE</div>
-        <div class="overlay-sub" id="overlay-sub">Prêt à jouer ?</div>
-        <div id="overlay-extra"></div>
+      <div class="field-group">
+        <div class="field-label">🎨 Choisis ton skin</div>
+        <div class="skin-grid" id="skin-grid"></div>
       </div>
-    </div>
 
-    <!-- Touch D-pad -->
-    <div class="touch-controls">
-      <div class="touch-row">
-        <div class="dpad-btn" id="d-up">▲</div>
+      <div class="action-row">
+        <div class="action-card create" onclick="onCreateRoom()">
+          <div class="ac-icon">🌐</div>
+          <div class="ac-title">Créer une Room</div>
+          <div class="ac-desc">Génère un code à partager.<br>Les autres ouvrent un nouvel onglet.</div>
+        </div>
+        <div class="action-card join" onclick="onShowJoin()">
+          <div class="ac-icon">🔗</div>
+          <div class="ac-title">Rejoindre une Room</div>
+          <div class="ac-desc">Entre le code affiché<br>chez le créateur de la room.</div>
+        </div>
       </div>
-      <div class="touch-row">
-        <div class="dpad-btn" id="d-left">◄</div>
-        <div class="dpad-btn" id="d-down">▼</div>
-        <div class="dpad-btn" id="d-right">►</div>
+
+      <div id="join-section" style="display:none;margin-top:10px">
+        <div class="field-label">🔑 Code de la room</div>
+        <div class="join-row">
+          <input class="field-input" id="join-code-input" maxlength="8" placeholder="ex: NEXUS42" autocomplete="off" style="text-transform:uppercase;letter-spacing:.2em"/>
+          <button class="btn c" onclick="onJoinRoom()">REJOINDRE</button>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Right Panel -->
-  <div class="right-panel">
-    <div class="streak-display">
-      <div class="streak-number" id="streak">0</div>
-      <div class="streak-label">SÉRIE</div>
-    </div>
+      <div style="margin-top:16px;padding:10px 14px;background:var(--panel2);border:1px solid var(--border);border-left:3px solid var(--accent4)">
+        <div style="font-size:.62rem;color:var(--accent4);letter-spacing:.15em;margin-bottom:5px">ℹ️ COMMENT JOUER</div>
+        <div style="font-size:.62rem;color:var(--dim);line-height:2">
+          1. Joueur 1 → <b style="color:var(--text2)">Créer une Room</b> → copie le code affiché<br>
+          2. Joueur 2+ → <b style="color:var(--text2)">Nouvel onglet</b> → ouvre ce même fichier HTML<br>
+          3. Joueur 2+ → <b style="color:var(--text2)">Rejoindre</b> → colle le code<br>
+          4. Joueur 1 → clique <b style="color:var(--accent3)">▶ LANCER</b> quand tout le monde est là
+        </div>
+      </div>
 
-    <div class="food-progress stat-box">
-      <div class="stat-label">Progrès</div>
-      <div class="food-dots" id="food-dots"></div>
-    </div>
-
-    <div class="current-speed stat-box">
-      <div class="stat-label">Taille</div>
-      <div class="speed-val" id="snake-length">3</div>
-    </div>
-
-    <div class="stat-box">
-      <div class="stat-label">Temps</div>
-      <div class="stat-value" id="timer" style="font-size:1.2rem">00:00</div>
     </div>
   </div>
 </div>
 
-  <script src="js/snake.js"></script>
+<!-- ══ ROOM / WAITING ═════════════════════════════════════ -->
+<div id="screen-room" class="screen hidden">
+  <div class="room-box">
+    <div class="room-header">
+      <div class="room-title">CODE DE LA ROOM — copie et partage</div>
+      <div class="room-code-display" id="room-code-display">——————</div>
+      <div class="room-code-hint">Ouvre un nouvel onglet, même fichier → Rejoindre → colle ce code</div>
+    </div>
+    <div class="room-body">
+      <div class="room-section-title">JOUEURS CONNECTÉS</div>
+      <div id="player-list"></div>
+      <div style="margin-top:14px">
+        <div class="room-section-title">POWER-UPS DISPONIBLES</div>
+        <div style="display:flex;flex-direction:column;gap:5px;font-size:.62rem">
+          <div>⚡ <b style="color:var(--text2)">Turbo</b> <span style="color:var(--dim)">— +60% vitesse 5s</span></div>
+          <div>🛡️ <b style="color:var(--text2)">Bouclier</b> <span style="color:var(--dim)">— Absorbe 1 collision mortelle</span></div>
+          <div>💰 <b style="color:var(--text2)">Double Score</b> <span style="color:var(--dim)">— Points x2 pendant 6s</span></div>
+          <div>👻 <b style="color:var(--text2)">Fantôme</b> <span style="color:var(--dim)">— Traverse les murs 5s</span></div>
+          <div>🧲 <b style="color:var(--text2)">Aimant</b> <span style="color:var(--dim)">— Attire la nourriture proche</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="room-footer">
+      <div class="room-hint" id="room-hint">En attente...</div>
+      <div id="host-controls" style="display:none;gap:8px">
+        <button class="btn g" id="btn-start-game" onclick="onStartGame()" disabled>▶ LANCER</button>
+        <button class="btn r" onclick="onBackToLobby()">✕ ANNULER</button>
+      </div>
+      <button class="btn r" id="btn-leave" style="display:none" onclick="onBackToLobby()">← QUITTER</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ GAME SCREEN ═════════════════════════════════════════ -->
+<div id="screen-game" class="screen hidden">
+  <div id="game-left">
+    <div class="canvas-frame">
+      <div class="c-tr"></div><div class="c-bl"></div>
+      <canvas id="gameCanvas" width="700" height="600"></canvas>
+      <div class="scanlines"></div>
+      <div id="particles"></div>
+      <div id="death-overlay" class="hidden">
+        <div class="do-title">💀 ÉLIMINÉ</div>
+        <div class="do-sub">Mode spectateur actif...</div>
+        <div class="do-score" id="do-score">0 pts</div>
+      </div>
+    </div>
+  </div>
+  <div id="game-right">
+    <div class="side-card">
+      <div class="sc-hdr"><div class="sc-dot c"></div>INFOS PARTIE</div>
+      <div class="sc-body" style="padding:7px 10px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
+          <div class="mi"><div class="ml">VIVANTS</div><div class="mv" id="mi-players">—</div></div>
+          <div class="mi"><div class="ml">MON SCORE</div><div class="mv" id="mi-score">0</div></div>
+          <div class="mi"><div class="ml">FOOD</div><div class="mv" id="mi-food">—</div></div>
+          <div class="mi"><div class="ml">VITESSE</div><div class="mv" id="mi-speed">—</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="side-card">
+      <div class="sc-hdr"><div class="sc-dot g"></div>MINIMAP 150×100</div>
+      <div class="minimap-wrap"><canvas id="minimap" width="240" height="160"></canvas></div>
+      <div style="padding:4px 10px 6px;display:flex;gap:8px;flex-wrap:wrap;font-size:.5rem;color:var(--dim)">
+        <span>⬜ Toi</span><span style="color:#ff2d6b">🔴 Food</span><span style="color:#ff9f00">🟡 PU</span>
+      </div>
+    </div>
+    <div class="side-card grow">
+      <div class="sc-hdr"><div class="sc-dot go"></div>CLASSEMENT</div>
+      <div class="sc-body scroll" id="lb-list"></div>
+    </div>
+    <div class="side-card grow">
+      <div class="sc-hdr"><div class="sc-dot r"></div>KILL FEED</div>
+      <div class="sc-body scroll" id="kf-list">
+        <div class="kf-item"><span class="kf-joined">En attente du lancement...</span></div>
+      </div>
+    </div>
+    <button class="btn r" onclick="onBackToLobby()" style="margin:0;flex-shrink:0;width:100%;border-left:none;border-right:none;border-bottom:none">← QUITTER</button>
+  </div>
+</div>
+
+<div id="toasts"></div>
+<div id="conn-status">🔌 Déconnecté</div>
+
+<script src="js/snake.js"></script>
 </body>
 </html>
